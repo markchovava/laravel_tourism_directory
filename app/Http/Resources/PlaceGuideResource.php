@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class UserResource extends JsonResource
+class PlaceGuideResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,16 +16,14 @@ class UserResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
-            'email' => $this->email,
-            'phone' => $this->phone,
-            'address' => $this->address,
-            'role_level' => $this->role_level,
-            'password' => $this->password,
-            'code' => $this->code,
+            'user_id' => $this->user_id,
+            'guide_id' => $this->guide_id,
+            'place_id' => $this->place_id,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'role' => new RoleResource($this->whenLoaded('role')),
+            'user' => new UserResource($this->whenLoaded('user')),
+            'guide' => new GuideResource($this->whenLoaded('guide')),
+            'place' => new PlaceResource($this->whenLoaded('place')),
         ];
     }
 }

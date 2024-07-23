@@ -5,18 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Category extends Model
+class PlaceGuide extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'priority',
         'id',
         'user_id',
-        'name',
-        'image',
-        'slug',
-        'description',
+        'guide_id',
+        'place_id',
         'created_at',
         'updated_at',
     ];
@@ -25,9 +22,12 @@ class Category extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public function places(){
-        return $this->belongsToMany(Place::class, 'place_categories', 'category_id', 'place_id')
-                ->withTimestamps();
+    public function guide(){
+        return $this->belongsTo(Guide::class, 'guide_id', 'id');
+    }
+
+    public function place(){
+        return $this->belongsTo(Place::class, 'place_id', 'id');
     }
 
     

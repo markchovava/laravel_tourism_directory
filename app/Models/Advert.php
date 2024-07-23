@@ -5,30 +5,25 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Category extends Model
+class Advert extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'priority',
         'id',
         'user_id',
+        'portrait',
+        'landscape',
         'name',
-        'image',
-        'slug',
         'description',
+        'href',
+        'priority',
         'created_at',
-        'updated_at',
+        'updated_at'
     ];
 
     public function user(){
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public function places(){
-        return $this->belongsToMany(Place::class, 'place_categories', 'category_id', 'place_id')
-                ->withTimestamps();
-    }
-
-    
 }

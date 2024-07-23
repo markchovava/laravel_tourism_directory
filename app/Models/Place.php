@@ -47,5 +47,10 @@ class Place extends Model
             ->withTimestamps();
     }
 
+    public function guides(){
+        return $this->belongsToMany(Guide::class, 'place_guides', 'place_id', 'guide_id')
+            ->withTimestamps();
+    }
+
 
 }

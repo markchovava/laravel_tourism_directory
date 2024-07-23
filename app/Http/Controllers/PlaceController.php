@@ -116,7 +116,7 @@ class PlaceController extends Controller
     }
 
     public function view($id){
-        $data = Place::with(['user', 'categories', 'province', 'city', 'place_images'])->find($id);
+        $data = Place::with(['user', 'categories', 'guides', 'province', 'city', 'place_images'])->find($id);
         return new PlaceResource($data);
     }
 
