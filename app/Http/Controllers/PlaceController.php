@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\PlaceResource;
+use App\Models\City;
+use App\Models\Guide;
 use App\Models\Place;
+use App\Models\PlaceGuide;
 use App\Models\PlaceImage;
+use App\Models\Province;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -12,6 +16,45 @@ class PlaceController extends Controller
 {
     
     public $upload_location = 'assets/img/place/';
+
+    public function indexCityGuide(Request $request){
+        $city = City::where('slug', $request->city_slug)->first();
+        $guide = Guide::where('slug', $request->guide_slug)->first();
+        $placeIds = PlaceGuide::where('guide_id', $guide->id)->pluck('place_id');
+        if(!empty($request->search)) {
+            $data = Place::with(['province', 'city', 'place_images'])
+                    ->where('city_id', $city->id)
+                    ->WhereIn('id', $placeIds)
+                    ->where('name', 'LIKE', '%' . $request->search . '%')
+                    ->paginate(12);
+            return PlaceResource::collection($data);
+        }
+        $data = Place::with(['province', 'city', 'place_images'])
+                ->where('city_id', $city->id)
+                ->WhereIn('id', $placeIds)
+                ->paginate(12);
+        return PlaceResource::collection($data);
+    }
+
+    
+    public function indexProvinceGuide(Request $request){
+        $province = Province::where('slug', $request->province_slug)->first();
+        $guide = Guide::where('slug', $request->guide_slug)->first();
+        $placeIds = PlaceGuide::where('guide_id', $guide->id)->pluck('place_id');
+        if(!empty($request->search)) {
+            $data = Place::with(['province', 'city', 'place_images'])
+                    ->where('province_id', $province->id)
+                    ->WhereIn('id', $placeIds)
+                    ->where('name', 'LIKE', '%' . $request->search . '%')
+                    ->paginate(12);
+            return PlaceResource::collection($data);
+        }
+        $data = Place::with(['province', 'city', 'place_images'])
+                ->where('province_id', $province->id)
+                ->WhereIn('id', $placeIds)
+                ->paginate(12);
+        return PlaceResource::collection($data);
+    }
 
     public function indexOne(){
         $data = Place::with(['place_images', 'city'])

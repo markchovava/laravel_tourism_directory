@@ -23,7 +23,7 @@ class AuthController extends Controller
         $data->email = $request->email;
         $data->code = $request->password;
         $data->password = Hash::make($request->password);
-        $data->role_level = 1;
+        $data->role_level = 4;
         $data->save();
         return response()->json([
             'status' => 1,

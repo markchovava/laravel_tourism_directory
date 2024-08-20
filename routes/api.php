@@ -98,6 +98,10 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
         Route::post('/{id}', [PlaceController::class, 'update']);
         Route::delete('/{id}', [PlaceController::class, 'delete']);
     });
+    Route::get('/place-province-guide', [PlaceController::class, 'indexProvinceGuide']);
+    Route::get('/place-city-guide', [PlaceController::class, 'indexCityGuide']);
+
+
     Route::prefix('place-image')->group(function() {
         Route::delete('/{id}', [PlaceImageController::class, 'delete']);
     });

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 23, 2024 at 06:50 PM
+-- Generation Time: Aug 20, 2024 at 04:23 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -308,7 +308,8 @@ INSERT INTO `personal_access_tokens` (`id`, `tokenable_type`, `tokenable_id`, `n
 (4, 'App\\Models\\User', 1, 'mark@email.com', '3e69a5a201d28f5299a434483be5c8e732b2c9164ff57c720a0a857465a39425', '[\"*\"]', NULL, NULL, '2024-06-04 15:26:25', '2024-06-04 15:26:25'),
 (11, 'App\\Models\\User', 1, 'mark@email.com', 'e93c8352981862d1b6714d87561b70aa50bdadb3623d631098d99a2bd844e2cf', '[\"*\"]', '2024-06-14 09:40:50', NULL, '2024-06-04 15:35:17', '2024-06-14 09:40:50'),
 (12, 'App\\Models\\User', 1, 'mark@email.com', '45159823036e553ec437f2f1bbc9022692527e58e312de7e4af6015e0d02db88', '[\"*\"]', '2024-06-06 09:30:02', NULL, '2024-06-05 03:35:21', '2024-06-06 09:30:02'),
-(14, 'App\\Models\\User', 1, 'mark@email.com', 'a5c4a817258364ce7df3a894e1e7700ae2af2c50258342c2088cc8c732fa79cd', '[\"*\"]', '2024-07-23 14:22:14', NULL, '2024-07-23 13:08:28', '2024-07-23 14:22:14');
+(14, 'App\\Models\\User', 1, 'mark@email.com', 'a5c4a817258364ce7df3a894e1e7700ae2af2c50258342c2088cc8c732fa79cd', '[\"*\"]', '2024-07-23 14:22:14', NULL, '2024-07-23 13:08:28', '2024-07-23 14:22:14'),
+(15, 'App\\Models\\User', 1, 'mark@email.com', '414a5082d4f6cc40d406ddb98b59298478925deb9513cc85c68afc88175235cc', '[\"*\"]', '2024-08-19 15:17:23', NULL, '2024-08-19 14:46:45', '2024-08-19 15:17:23');
 
 -- --------------------------------------------------------
 
@@ -438,7 +439,14 @@ INSERT INTO `place_guides` (`id`, `user_id`, `place_id`, `guide_id`, `created_at
 (24, 1, 14, 6, '2024-07-22 15:23:02', '2024-07-22 15:23:02'),
 (25, 1, 15, 7, '2024-07-22 15:23:41', '2024-07-22 15:23:41'),
 (26, 1, 16, 7, '2024-07-22 15:24:12', '2024-07-22 15:24:12'),
-(27, 1, 16, 9, '2024-07-22 15:24:18', '2024-07-22 15:24:18');
+(27, 1, 16, 9, '2024-07-22 15:24:18', '2024-07-22 15:24:18'),
+(28, 1, 21, 12, '2024-08-19 15:02:24', '2024-08-19 15:02:24'),
+(29, 1, 20, 12, '2024-08-19 15:02:42', '2024-08-19 15:02:42'),
+(30, 1, 19, 12, '2024-08-19 15:02:58', '2024-08-19 15:02:58'),
+(31, 1, 13, 12, '2024-08-19 15:03:21', '2024-08-19 15:03:21'),
+(32, 1, 17, 12, '2024-08-19 15:04:33', '2024-08-19 15:04:33'),
+(33, 1, 17, 7, '2024-08-19 15:04:42', '2024-08-19 15:04:42'),
+(34, 1, 12, 10, '2024-08-19 15:17:22', '2024-08-19 15:17:22');
 
 -- --------------------------------------------------------
 
@@ -620,7 +628,8 @@ INSERT INTO `reviews` (`id`, `user_id`, `place_id`, `email`, `rating`, `message`
 (1, NULL, 19, 'm@fvofin', 3, 'hjhgg', '2024-07-23 07:25:03', '2024-07-23 07:25:03'),
 (2, NULL, 19, 'kb@gmail.com', 4, 'niuvbiv', '2024-07-23 07:46:23', '2024-07-23 07:46:23'),
 (7, NULL, 16, 'a@g.com', 4, 'Go on', '2024-07-23 13:09:50', '2024-07-23 13:09:50'),
-(8, NULL, 16, NULL, 1, NULL, '2024-07-23 13:10:28', '2024-07-23 13:10:28');
+(8, NULL, 16, NULL, 1, NULL, '2024-07-23 13:10:28', '2024-07-23 13:10:28'),
+(9, NULL, 13, 'zuva@gmail.com', 4, 'Tetsing', '2024-08-20 12:10:37', '2024-08-20 12:10:37');
 
 -- --------------------------------------------------------
 
@@ -852,7 +861,7 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT for table `personal_access_tokens`
 --
 ALTER TABLE `personal_access_tokens`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `places`
@@ -870,7 +879,7 @@ ALTER TABLE `place_categories`
 -- AUTO_INCREMENT for table `place_guides`
 --
 ALTER TABLE `place_guides`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `place_images`
@@ -888,7 +897,7 @@ ALTER TABLE `provinces`
 -- AUTO_INCREMENT for table `reviews`
 --
 ALTER TABLE `reviews`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `roles`

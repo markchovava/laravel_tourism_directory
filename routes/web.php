@@ -79,6 +79,9 @@ Route::prefix('place')->group(function() {
     Route::get('/{id}', [PlaceController::class, 'view']);
 });
 Route::get('/place-one', [PlaceController::class, 'indexOne']);
+Route::get('/place-province-guide', [PlaceController::class, 'indexProvinceGuide']);
+Route::get('/place-city-guide', [PlaceController::class, 'indexCityGuide']);
+
 /* PROVINCES */
 Route::prefix('province')->group(function() {
     Route::get('/', [ProvinceController::class, 'index']);
