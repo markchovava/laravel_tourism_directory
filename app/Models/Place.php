@@ -10,8 +10,8 @@ class Place extends Model
     use HasFactory;
 
     protected $fillable = [
-        'priority',
         'id',
+        'priority',
         'user_id',
         'city_id',
         'province_id',
@@ -36,6 +36,10 @@ class Place extends Model
 
     public function city(){
         return $this->belongsTo(City::class, 'city_id', 'id');
+    }
+
+    public function rating(){
+        return $this->hasOne(Rating::class, 'place_id', 'id');
     }
 
     public function place_images(){

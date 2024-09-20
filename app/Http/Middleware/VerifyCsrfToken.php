@@ -19,6 +19,7 @@ class VerifyCsrfToken extends Middleware
         'http://127.0.0.1:8003/role',
         'http://127.0.0.1:8003/review',
         'http://127.0.0.1:8003/review/*',
+        'http://127.0.0.1:8003/review-by-place-id/*'
 
     ];
 }

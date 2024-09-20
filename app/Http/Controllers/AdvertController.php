@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 class AdvertController extends Controller
 {
+    
     public $upload_location = 'assets/img/advert/';
 
     public function indexByUser(Request $request) {
