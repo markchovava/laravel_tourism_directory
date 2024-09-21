@@ -17,6 +17,7 @@ return new class extends Migration
             $table->mediumInteger('place_id')->nullable();
             $table->mediumInteger('quantity')->nullable();
             $table->mediumInteger('total')->nullable();
+            $table->mediumInteger('rate')->nullable();
             $table->timestamps();
         });
     }

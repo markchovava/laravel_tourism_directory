@@ -31,7 +31,10 @@ class CategoryController extends Controller
     public function categoryPlaces(Request $request){
         $category = Category::where('slug', $request->slug)->first();
         $placeIds = PlaceCategory::where('category_id', $category->id)->pluck('place_id');
-        $data = Place::with(['place_images', 'city'])->whereIn('id', $placeIds)->orderBy('priority', 'asc')->paginate(8);
+        $data = Place::with(['place_images', 'city', 'rating'])
+                ->whereIn('id', $placeIds)
+                ->orderBy('priority', 'asc')
+                ->paginate(8);
         return PlaceResource::collection($data);
     }
 
@@ -39,7 +42,7 @@ class CategoryController extends Controller
         $category = Category::where('slug', $request->slug)->first(); // Category Slug
         $placeIds = PlaceCategory::where('category_id', $category->id)->pluck('place_id');
         if(!isset($request->city_id)){
-            $data = Place::with(['place_images', 'city'])
+            $data = Place::with(['place_images', 'city', 'rating'])
                 //->where('city_id', $request->city_id) // City Id
                 ->whereIn('id', $placeIds)
                 ->where('name', 'LIKE', '%' . $request->name . '%') // Place Nmae
@@ -47,7 +50,7 @@ class CategoryController extends Controller
             return PlaceResource::collection($data);
         }
         if(!isset($request->name)){
-            $data = Place::with(['place_images', 'city'])
+            $data = Place::with(['place_images', 'city', 'rating'])
                 ->where('city_id', $request->city_id) // City Id
                 ->whereIn('id', $placeIds)
                 //->where('name', 'LIKE', '%' . $request->name . '%') // Place Nmae
@@ -55,7 +58,7 @@ class CategoryController extends Controller
             return PlaceResource::collection($data);
         }
         if(isset($request->name) && isset($request->city_id)){
-            $data = Place::with(['place_images', 'city'])
+            $data = Place::with(['place_images', 'city', 'rating'])
                     ->where('city_id', $request->city_id) // City Id
                     ->whereIn('id', $placeIds)
                     ->where('name', 'LIKE', '%' . $request->name . '%') // Place Nmae

@@ -18,19 +18,19 @@ class CityController extends Controller
 
     public function cityPlacesSearchByName(Request $request){
         if(!isset($request->city_id)){
-            $data = Place::with(['place_images', 'city'])
+            $data = Place::with(['place_images', 'city', 'rating'])
                 ->where('name', 'LIKE', '%' . $request->name . '%') // Place Nmae
                 ->orderBy('name', 'asc')->paginate(12);
             return PlaceResource::collection($data);
         }
         if(!isset($request->name)){
-            $data = Place::with(['place_images', 'city'])
+            $data = Place::with(['place_images', 'city', 'rating'])
                 ->where('city_id', $request->city_id) // City Id
                 ->orderBy('name', 'asc')->paginate(12);
             return PlaceResource::collection($data);
         }
         if(isset($request->name) && isset($request->city_id)){
-            $data = Place::with(['place_images', 'city'])
+            $data = Place::with(['place_images', 'city', 'rating'])
                     ->where('city_id', $request->city_id) // City Id
                     ->where('name', 'LIKE', '%' . $request->name . '%') // Place Nmae
                     ->orderBy('name', 'asc')->paginate(12);
@@ -49,7 +49,7 @@ class CityController extends Controller
         $city = City::where('slug', $request->city_slug)->first();
         $placeIds = PlaceCategory::where('category_id', $category->id)->pluck('place_id');
         if(!empty($request->search)){
-            $data = Place::with(['place_images', 'city'])
+            $data = Place::with(['place_images', 'city', 'rating'])
                     ->where('city_id', $city->id)
                     ->whereIn('id', $placeIds)
                     ->where('name', 'LIKE', '%' . $request->search . '%')
@@ -57,7 +57,7 @@ class CityController extends Controller
                     ->paginate(12);
             return PlaceResource::collection($data);
         }
-        $data = Place::with(['place_images', 'city'])
+        $data = Place::with(['place_images', 'city', 'rating'])
             ->where('city_id', $city->id)
             ->whereIn('id', $placeIds)
             ->orderBy('name', 'asc')
@@ -74,12 +74,13 @@ class CityController extends Controller
     public function cityPlaces(Request $request){
         $city = City::where('slug', $request->slug)->first();
         if(!empty($request->search)){
-            $data = Place::with(['place_images', 'city'])->where('city_id', $city->id)
+            $data = Place::with(['place_images', 'city', 'rating'])
+                    ->where('city_id', $city->id)
                     ->where('name', 'LIKE', '%' . $request->search . '%')
                     ->paginate(12);
             return PlaceResource::collection($data);
         }
-        $data = Place::with(['place_images', 'city'])->where('city_id', $city->id)->paginate(12);
+        $data = Place::with(['place_images', 'city', 'rating'])->where('city_id', $city->id)->paginate(12);
         return PlaceResource::collection($data);
     }
 
@@ -105,6 +106,7 @@ class CityController extends Controller
                 ->paginate(12);
         return CityResource::collection($data);
     }
+    
     public function store(Request $request){
         $user_id = Auth::user()->id;
         $data = new City();
@@ -129,6 +131,7 @@ class CityController extends Controller
             'data' => new CityResource($data),
         ]);
     }
+
     public function update(Request $request, $id){
         $user_id = Auth::user()->id;
         $data = City::find($id);
@@ -160,10 +163,12 @@ class CityController extends Controller
             'data' => new CityResource($data),
         ]);
     }
+
     public function view($id){
         $data = City::with(['user', 'province'])->find($id);
         return new CityResource($data);
     }
+
     public function delete($id){
         $data = City::find($id);
         if(file_exists( public_path($data->image) )){

@@ -29,7 +29,7 @@ class ProvinceController extends Controller
         $province = Province::where('slug', $request->province_slug)->first();
         $placeIds = PlaceCategory::where('category_id', $category->id)->pluck('place_id');
         if(!empty($request->search)){
-            $data = Place::with(['place_images', 'city'])
+            $data = Place::with(['place_images', 'city', 'rating'])
                     ->where('province_id', $province->id)
                     ->whereIn('id', $placeIds)
                     ->where('name', 'LIKE', '%' . $request->search . '%')

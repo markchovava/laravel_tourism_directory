@@ -22,14 +22,14 @@ class PlaceController extends Controller
         $guide = Guide::where('slug', $request->guide_slug)->first();
         $placeIds = PlaceGuide::where('guide_id', $guide->id)->pluck('place_id');
         if(!empty($request->search)) {
-            $data = Place::with(['province', 'city', 'place_images'])
+            $data = Place::with(['province', 'city', 'place_images', 'rating'])
                     ->where('city_id', $city->id)
                     ->WhereIn('id', $placeIds)
                     ->where('name', 'LIKE', '%' . $request->search . '%')
                     ->paginate(12);
             return PlaceResource::collection($data);
         }
-        $data = Place::with(['province', 'city', 'place_images'])
+        $data = Place::with(['province', 'city', 'place_images', 'rating'])
                 ->where('city_id', $city->id)
                 ->WhereIn('id', $placeIds)
                 ->paginate(12);
@@ -42,14 +42,14 @@ class PlaceController extends Controller
         $guide = Guide::where('slug', $request->guide_slug)->first();
         $placeIds = PlaceGuide::where('guide_id', $guide->id)->pluck('place_id');
         if(!empty($request->search)) {
-            $data = Place::with(['province', 'city', 'place_images'])
+            $data = Place::with(['province', 'city', 'place_images', 'rating'])
                     ->where('province_id', $province->id)
                     ->WhereIn('id', $placeIds)
                     ->where('name', 'LIKE', '%' . $request->search . '%')
                     ->paginate(12);
             return PlaceResource::collection($data);
         }
-        $data = Place::with(['province', 'city', 'place_images'])
+        $data = Place::with(['province', 'city', 'place_images', 'rating'])
                 ->where('province_id', $province->id)
                 ->WhereIn('id', $placeIds)
                 ->paginate(12);
@@ -57,7 +57,7 @@ class PlaceController extends Controller
     }
 
     public function indexOne(){
-        $data = Place::with(['place_images', 'city'])
+        $data = Place::with(['place_images', 'city', 'rating'])
                 ->orderBy('priority', 'asc')
                 ->paginate(8);
         return PlaceResource::collection($data);
@@ -66,12 +66,12 @@ class PlaceController extends Controller
 
     public function index(Request $request){
         if(!empty($request->search)){
-            $data = Place::with(['place_images', 'user', 'province', 'city'])
+            $data = Place::with(['place_images', 'province', 'city', 'reviews', 'rating', 'user'])
                     ->where('name', 'LIKE', '%' . $request->search . '%')
                     ->paginate(12);
             return PlaceResource::collection($data);
         }
-        $data = Place::with(['place_images', 'user', 'province', 'city'])
+        $data = Place::with(['place_images', 'province', 'city', 'reviews', 'rating', 'user'])
                 ->orderBy('updated_at', 'desc')
                 ->paginate(12);
         return PlaceResource::collection($data);
@@ -159,7 +159,7 @@ class PlaceController extends Controller
     }
 
     public function view($id){
-        $data = Place::with(['user', 'categories', 'guides', 'province', 'city', 'place_images'])->find($id);
+        $data = Place::with(['user', 'categories', 'guides', 'province', 'city', 'place_images', 'rating'])->find($id);
         return new PlaceResource($data);
     }
 

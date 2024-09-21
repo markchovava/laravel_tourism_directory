@@ -19,6 +19,7 @@ class RatingResource extends JsonResource
             'place_id' => $this->place_id,
             'quantity' => $this->quantity,
             'total' => $this->total,
+            'rate' => $this->rate,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'place' => new PlaceResource($this->whenLoaded('place')),

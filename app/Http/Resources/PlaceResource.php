@@ -29,6 +29,7 @@ class PlaceResource extends JsonResource
             'website' => $this->website,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'reviews' => ReviewResource::collection($this->whenLoaded('reviews')),
             'rating' => new RatingResource($this->whenLoaded('rating')),
             'user' => new UserResource($this->whenLoaded('user')),
             'city' => new CityResource($this->whenLoaded('city')),

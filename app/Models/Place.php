@@ -42,6 +42,10 @@ class Place extends Model
         return $this->hasOne(Rating::class, 'place_id', 'id');
     }
 
+    public function reviews(){
+        return $this->hasMany(Review::class, 'place_id', 'id');
+    }
+
     public function place_images(){
         return $this->hasMany(PlaceImage::class, 'place_id', 'id');
     }

@@ -17,7 +17,7 @@ class PlaceGuideController extends Controller
         if(!empty($request->search)){
             $guide = Guide::where('slug', $request->slug)->first();
             $place_ids = PlaceGuide::where('guide_id', $guide->id)->pluck('place_id');
-            $data = Place::with(['city', 'place_images'])
+            $data = Place::with(['city', 'place_images', 'rating'])
                     ->whereIn('id', $place_ids)
                     ->where('name', 'LIKE', '%' . $request->search . '%')
                     ->orderBy('priority', 'asc')
@@ -26,7 +26,7 @@ class PlaceGuideController extends Controller
         }
         $guide = Guide::where('slug', $request->slug)->first();
         $place_ids = PlaceGuide::where('guide_id', $guide->id)->pluck('place_id');
-        $data = Place::with(['city', 'place_images'])
+        $data = Place::with(['city', 'place_images', 'rating'])
                 ->whereIn('id', $place_ids)
                 ->orderBy('priority', 'asc')
                 ->paginate(12);
