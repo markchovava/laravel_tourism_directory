@@ -110,7 +110,7 @@ class ReviewController extends Controller
         $rating = Rating::where('place_id', $data->place_id)->first();
         $rating->quantity -= 1;
         $rating->total -= $data->rating;
-        $quantity = $rating->quantity * 5;
+        $quantity = $rating->quantity > 0 ? $rating->quantity * 5 : 1;
         $calculate = ($rating->total / $quantity) * 5;
         $rounded = round($calculate);
         $rating->rate = $rounded;
