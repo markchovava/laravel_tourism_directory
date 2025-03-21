@@ -31,14 +31,16 @@ class GuideController extends Controller
                     ->where('user_id', $user_id)
                     ->where('name', 'LIKE', '%' . $request->search . '%')
                     ->orderBy('updated_at', 'desc')
-                    ->paginate(12);
+                    ->paginate(12)
+->withQueryString();
             return GuideResource::collection($data);
         }
         $data = Guide::with(['user'])
                 ->where('user_id', $user_id)
                 ->orderBy('updated_at', 'desc')
                 ->orderBy('name', 'asc')
-                ->paginate(12);
+                ->paginate(12)
+->withQueryString();
         return GuideResource::collection($data);
     }
 
@@ -47,13 +49,15 @@ class GuideController extends Controller
             $data = Guide::with(['user'])
                     ->where('name', 'LIKE', '%' . $request->search . '%')
                     ->orderBy('updated_at', 'desc')
-                    ->paginate(12);
+                    ->paginate(12)
+->withQueryString();
             return GuideResource::collection($data);
         }
         $data = Guide::with(['user'])
                 ->orderBy('updated_at', 'desc')
                 ->orderBy('name', 'asc')
-                ->paginate(12);
+                ->paginate(12)
+->withQueryString();
         return GuideResource::collection($data);
     }
 

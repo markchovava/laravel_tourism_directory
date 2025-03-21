@@ -12,6 +12,16 @@ class AdvertController extends Controller
     
     public $upload_location = 'assets/img/advert/';
 
+    public function viewByPriority(Request $request) {
+        $data = Advert::where('priority', $request->priority)->first();
+        if(!isset($data)){
+            return response()->json([
+                'data' => null,
+            ]);
+        }
+        return new AdvertResource($data);
+    }
+
     public function indexByUser(Request $request) {
         $user_id = Auth::user()->id;
         if(!empty($request->search)){
@@ -19,29 +29,42 @@ class AdvertController extends Controller
                     ->where('user_id', $user_id)
                     ->where('name', 'LIKE', '%' . $request->search . '%')
                     ->orderBy('updated_at', 'desc')
-                    ->paginate(12);
+                    ->paginate(12)
+->withQueryString();
             return AdvertResource::collection($data);
         }
         $data = Advert::with(['user'])
                 ->where('user_id', $user_id)
                 ->orderBy('updated_at', 'desc')
                 ->orderBy('name', 'asc')
-                ->paginate(12);
+                ->paginate(12)
+->withQueryString();
         return AdvertResource::collection($data);
     }
 
-    public function index(Request $request) {
+    public function search(Request $request) {
         if(!empty($request->search)){
             $data = Advert::with(['user'])
                     ->where('name', 'LIKE', '%' . $request->search . '%')
                     ->orderBy('updated_at', 'desc')
-                    ->paginate(12);
+                    ->paginate(12)
+->withQueryString();
             return AdvertResource::collection($data);
         }
         $data = Advert::with(['user'])
                 ->orderBy('updated_at', 'desc')
                 ->orderBy('name', 'asc')
-                ->paginate(12);
+                ->paginate(12)
+->withQueryString();
+        return AdvertResource::collection($data);
+    }
+
+    public function index() {
+        $data = Advert::with(['user'])
+                ->orderBy('updated_at', 'desc')
+                ->orderBy('name', 'asc')
+                ->paginate(12)
+->withQueryString();
         return AdvertResource::collection($data);
     }
 
@@ -54,8 +77,6 @@ class AdvertController extends Controller
         $data->href = $request->href;
         $data->priority = $request->priority;
         $data->description = $request->description;
-        $data->updated_at = now();
-        $data->created_at = now();
         if( $request->hasFile('landscape') ) {
             $image = $request->file('landscape');
             $image_extension = strtolower($image->getClientOriginalExtension());
@@ -70,6 +91,8 @@ class AdvertController extends Controller
             $image->move($this->upload_location, $image_name);
             $data->portrait = $this->upload_location . $image_name;                        
         }
+        $data->updated_at = now();
+        $data->created_at = now();
         $data->save();
         return response()->json([
             'status' => 1,
@@ -87,7 +110,6 @@ class AdvertController extends Controller
         $data->href = $request->href;
         $data->priority = $request->priority;
         $data->description = $request->description;
-        $data->updated_at = now();
         if( $request->hasFile('landscape') ){
             $image = $request->file('landscape');
             $image_extension = strtolower($image->getClientOriginalExtension());
@@ -118,6 +140,7 @@ class AdvertController extends Controller
                 $data->portrait = $this->upload_location . $image_name;
             } 
         }
+        $data->updated_at = now();
         $data->save();
         return response()->json([
             'status' => 1,

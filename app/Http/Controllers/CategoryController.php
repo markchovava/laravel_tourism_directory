@@ -46,7 +46,8 @@ class CategoryController extends Controller
                 //->where('city_id', $request->city_id) // City Id
                 ->whereIn('id', $placeIds)
                 ->where('name', 'LIKE', '%' . $request->name . '%') // Place Nmae
-                ->orderBy('name', 'asc')->paginate(12);
+                ->orderBy('name', 'asc')->paginate(12)
+->withQueryString();
             return PlaceResource::collection($data);
         }
         if(!isset($request->name)){
@@ -54,7 +55,8 @@ class CategoryController extends Controller
                 ->where('city_id', $request->city_id) // City Id
                 ->whereIn('id', $placeIds)
                 //->where('name', 'LIKE', '%' . $request->name . '%') // Place Nmae
-                ->orderBy('name', 'asc')->paginate(12);
+                ->orderBy('name', 'asc')->paginate(12)
+->withQueryString();
             return PlaceResource::collection($data);
         }
         if(isset($request->name) && isset($request->city_id)){
@@ -62,7 +64,8 @@ class CategoryController extends Controller
                     ->where('city_id', $request->city_id) // City Id
                     ->whereIn('id', $placeIds)
                     ->where('name', 'LIKE', '%' . $request->name . '%') // Place Nmae
-                    ->orderBy('name', 'asc')->paginate(12);
+                    ->orderBy('name', 'asc')->paginate(12)
+->withQueryString();
             return PlaceResource::collection($data);
         }
         if(!isset($data)){
@@ -82,12 +85,14 @@ class CategoryController extends Controller
         if(!empty($request->search)){
             $data = Category::with(['user'])
                     ->where('name', 'LIKE', '%' . $request->search . '%')
-                    ->paginate(12);
+                    ->paginate(12)
+->withQueryString();
             return CategoryResource::collection($data);
         }
         $data = Category::with(['user'])
                 ->orderBy('updated_at', 'desc')
-                ->paginate(12);
+                ->paginate(12)
+->withQueryString();
         return CategoryResource::collection($data);
     }
     public function store(Request $request){

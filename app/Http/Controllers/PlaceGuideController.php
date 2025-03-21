@@ -20,21 +20,28 @@ class PlaceGuideController extends Controller
             $data = Place::with(['city', 'place_images', 'rating'])
                     ->whereIn('id', $place_ids)
                     ->where('name', 'LIKE', '%' . $request->search . '%')
+                    ->orderBy('updated_at', 'desc')
                     ->orderBy('priority', 'asc')
-                    ->paginate(12);
+                    ->paginate(12)
+->withQueryString();
             return PlaceResource::collection($data);
         }
         $guide = Guide::where('slug', $request->slug)->first();
         $place_ids = PlaceGuide::where('guide_id', $guide->id)->pluck('place_id');
         $data = Place::with(['city', 'place_images', 'rating'])
                 ->whereIn('id', $place_ids)
+                ->orderBy('updated_at', 'desc')
                 ->orderBy('priority', 'asc')
-                ->paginate(12);
+                ->paginate(12)
+->withQueryString();
         return PlaceResource::collection($data);
     }
 
     public function guidesByPlaceId($id){
-        $data = PlaceGuide::with(['place', 'guide'])->where('place_id', $id)->get();
+        $data = PlaceGuide::with(['place', 'guide'])
+                ->where('place_id', $id)
+                ->orderBy('updated_at', 'desc')
+                ->get();
         return PlaceGuideResource::collection($data);
     }
 

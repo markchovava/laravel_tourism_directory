@@ -25,14 +25,16 @@ class EventController extends Controller
                     ->where('user_id', $user_id)
                     ->where('name', 'LIKE', '%' . $request->search . '%')
                     ->orderBy('updated_at', 'desc')
-                    ->paginate(12);
+                    ->paginate(12)
+->withQueryString();
             return EventResource::collection($data);
         }
         $data = Event::with(['user'])
                 ->where('user_id', $user_id)
                 ->orderBy('updated_at', 'desc')
                 ->orderBy('name', 'asc')
-                ->paginate(12);
+                ->paginate(12)
+->withQueryString();
         return EventResource::collection($data);
     }
 
@@ -41,13 +43,15 @@ class EventController extends Controller
             $data = Event::with(['user', 'city'])
                     ->where('name', 'LIKE', '%' . $request->search . '%')
                     ->orderBy('updated_at', 'desc')
-                    ->paginate(12);
+                    ->paginate(12)
+->withQueryString();
             return EventResource::collection($data);
         }
         $data = Event::with(['user', 'city'])
                 ->orderBy('updated_at', 'desc')
                 ->orderBy('name', 'asc')
-                ->paginate(12);
+                ->paginate(12)
+->withQueryString();
         return EventResource::collection($data);
     }
 

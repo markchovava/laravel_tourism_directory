@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdvertController;
 use App\Http\Controllers\AppInfoController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
@@ -36,6 +37,14 @@ Route::prefix('app-info')->group(function() {
     Route::get('/', [AppInfoController::class, 'view']);
     Route::post('/', [AppInfoController::class, 'update']);
 });
+
+
+/* ADVERTS */
+Route::prefix('advert')->group(function() {
+    Route::get('/', [AdvertController::class, 'index']);
+    Route::get('/{id}', [AdvertController::class, 'view']);
+});
+Route::get('advert-by-priority', [AdvertController::class, 'viewByPriority']);
 
 
 Route::prefix('category')->group(function() {
@@ -91,6 +100,7 @@ Route::get('/province-all', [ProvinceController::class, 'indexAll']);
 Route::get('/province-cities', [ProvinceController::class, 'provinceCities']);
 Route::get('/province-by-slug', [ProvinceController::class, 'provinceBySlug']);
 Route::get('/province-category-places', [ProvinceController::class, 'provinceCategoryPlaces']);
+Route::get('/province-guide-places/{province_slug}/{guide_slug}', [ProvinceController::class, 'provinceGuidePlaces']);
 
 /* REVIEW */
 Route::prefix('review')->group(function() {

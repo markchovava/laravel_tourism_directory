@@ -26,13 +26,15 @@ class PlaceController extends Controller
                     ->where('city_id', $city->id)
                     ->WhereIn('id', $placeIds)
                     ->where('name', 'LIKE', '%' . $request->search . '%')
-                    ->paginate(12);
+                    ->paginate(12)
+->withQueryString();
             return PlaceResource::collection($data);
         }
         $data = Place::with(['province', 'city', 'place_images', 'rating'])
                 ->where('city_id', $city->id)
                 ->WhereIn('id', $placeIds)
-                ->paginate(12);
+                ->paginate(12)
+->withQueryString();
         return PlaceResource::collection($data);
     }
 
@@ -46,36 +48,80 @@ class PlaceController extends Controller
                     ->where('province_id', $province->id)
                     ->WhereIn('id', $placeIds)
                     ->where('name', 'LIKE', '%' . $request->search . '%')
-                    ->paginate(12);
+                    ->paginate(12)
+->withQueryString();
             return PlaceResource::collection($data);
         }
         $data = Place::with(['province', 'city', 'place_images', 'rating'])
                 ->where('province_id', $province->id)
                 ->WhereIn('id', $placeIds)
-                ->paginate(12);
+                ->paginate(12)
+->withQueryString();
         return PlaceResource::collection($data);
     }
 
-    public function indexOne(){
+    /* public function indexOne(){
         $data = Place::with(['place_images', 'city', 'rating'])
                 ->orderBy('priority', 'asc')
                 ->paginate(8);
         return PlaceResource::collection($data);
-    }
+    } */
 
 
     public function index(Request $request){
         if(!empty($request->search)){
             $data = Place::with(['place_images', 'province', 'city', 'reviews', 'rating', 'user'])
                     ->where('name', 'LIKE', '%' . $request->search . '%')
-                    ->paginate(12);
+                    ->paginate(12)
+->withQueryString();
             return PlaceResource::collection($data);
         }
         $data = Place::with(['place_images', 'province', 'city', 'reviews', 'rating', 'user'])
                 ->orderBy('updated_at', 'desc')
-                ->paginate(12);
+                ->paginate(12)
+->withQueryString();
         return PlaceResource::collection($data);
     }
+
+    /* public function storeAll(Request $request){
+        $user_id = Auth::user()->id;
+        $data = new Place();
+        $data->priority = $request->priority;
+        $data->user_id = $user_id;
+        $data->province_id = $request->province_id;
+        $data->city_id = $request->city_id;
+        $data->name = $request->name;
+        $data->slug = $request->slug;
+        $data->description = $request->description;
+        $data->email = $request->email;
+        $data->website = $request->website;
+        $data->phone = $request->phone;
+        $data->address = $request->address;
+        $data->created_at = now();
+        $data->updated_at = now();
+        $data->save();
+        if(!empty($request->file('place_images'))){
+            $place_images = $request->file('place_images');
+            for($i = 0; $i < count($place_images); $i++){
+                $item = new PlaceImage();
+                $item->place_id = $data->id;
+                $item->user_id = $user_id;
+                if( isset($place_images[$i]) ) {
+                    $image = $place_images[$i];
+                    $image_extension = strtolower($image->getClientOriginalExtension());
+                    $image_name = 'place_' . date('Ymd') . rand(0, 10000) . '.' . $image_extension;
+                    $image->move($this->upload_location, $image_name);
+                    $item->image = $this->upload_location . $image_name;                        
+                }
+                $item->save();
+            }
+        }  
+        return response()->json([
+            'status' => 1,
+            'message' => 'Saved successfully.',
+            'data' => new PlaceResource($data),
+        ]);
+    } */
 
     public function store(Request $request){
         $user_id = Auth::user()->id;

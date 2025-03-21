@@ -10,6 +10,8 @@ use App\Models\Place;
 use App\Models\PlaceCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class CityController extends Controller
 {
@@ -20,20 +22,20 @@ class CityController extends Controller
         if(!isset($request->city_id)){
             $data = Place::with(['place_images', 'city', 'rating'])
                 ->where('name', 'LIKE', '%' . $request->name . '%') // Place Nmae
-                ->orderBy('name', 'asc')->paginate(12);
+                ->orderBy('name', 'asc')->paginate(12)->withQueryString();
             return PlaceResource::collection($data);
         }
         if(!isset($request->name)){
             $data = Place::with(['place_images', 'city', 'rating'])
                 ->where('city_id', $request->city_id) // City Id
-                ->orderBy('name', 'asc')->paginate(12);
+                ->orderBy('name', 'asc')->paginate(12)->withQueryString();
             return PlaceResource::collection($data);
         }
         if(isset($request->name) && isset($request->city_id)){
             $data = Place::with(['place_images', 'city', 'rating'])
                     ->where('city_id', $request->city_id) // City Id
                     ->where('name', 'LIKE', '%' . $request->name . '%') // Place Nmae
-                    ->orderBy('name', 'asc')->paginate(12);
+                    ->orderBy('name', 'asc')->paginate(12)->withQueryString();
             return PlaceResource::collection($data);
         }
         if(!isset($data)){
@@ -42,6 +44,26 @@ class CityController extends Controller
                 'data' => [],
             ]);
         }
+    }
+
+    public function cityPlaces(Request $request){
+        $city = City::where('slug', $request->slug)->first();
+        Log::info('city');
+        Log::info($city);
+        if(!empty($request->search)){
+            $data = Place::with(['place_images', 'city', 'rating'])
+                    ->where('city_id', $city->id)
+                    ->where('name', 'LIKE', '%' . $request->search . '%')
+                    ->paginate(12)
+                    ->withQueryString();
+            return PlaceResource::collection($data);
+        }
+        $data = Place::with(['place_images', 'city', 'rating'])
+                ->where('city_id', $city->id)
+                ->orderBy('updated_at', 'desc')
+                ->orderBy('name', 'asc')
+                ->paginate(12)->withQueryString();
+        return PlaceResource::collection($data);
     }
 
     public function cityCategoryPlaces(Request $request){
@@ -54,34 +76,20 @@ class CityController extends Controller
                     ->whereIn('id', $placeIds)
                     ->where('name', 'LIKE', '%' . $request->search . '%')
                     ->orderBy('name', 'asc')
-                    ->paginate(12);
+                    ->paginate(12)->withQueryString();
             return PlaceResource::collection($data);
         }
         $data = Place::with(['place_images', 'city', 'rating'])
             ->where('city_id', $city->id)
             ->whereIn('id', $placeIds)
             ->orderBy('name', 'asc')
-            ->paginate(12);
+            ->paginate(12)->withQueryString();
         return PlaceResource::collection($data);
     }
-
 
     public function cityBySlug(Request $request){
         $data = City::where('slug', $request->slug)->first();
         return new CityResource($data);
-    }
-
-    public function cityPlaces(Request $request){
-        $city = City::where('slug', $request->slug)->first();
-        if(!empty($request->search)){
-            $data = Place::with(['place_images', 'city', 'rating'])
-                    ->where('city_id', $city->id)
-                    ->where('name', 'LIKE', '%' . $request->search . '%')
-                    ->paginate(12);
-            return PlaceResource::collection($data);
-        }
-        $data = Place::with(['place_images', 'city', 'rating'])->where('city_id', $city->id)->paginate(12);
-        return PlaceResource::collection($data);
     }
 
     public function indexOne(){
@@ -94,16 +102,18 @@ class CityController extends Controller
         $data = City::orderBy('name', 'asc')->get();
         return CityResource::collection($data);
     }
+
     public function index(Request $request){
         if(!empty($request->search)){
             $data = City::with(['user', 'province'])
                     ->where('name', 'LIKE', '%' . $request->search . '%')
-                    ->paginate(12);
+                    ->paginate(12)
+                    ->withQueryString();
             return CityResource::collection($data);
         }
         $data = City::with(['user', 'province'])
                 ->orderBy('name', 'asc')
-                ->paginate(12);
+                ->paginate(12)->withQueryString();
         return CityResource::collection($data);
     }
     

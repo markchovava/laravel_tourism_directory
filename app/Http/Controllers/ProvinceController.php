@@ -7,11 +7,14 @@ use App\Http\Resources\PlaceResource;
 use App\Http\Resources\ProvinceResource;
 use App\Models\Category;
 use App\Models\City;
+use App\Models\Guide;
 use App\Models\Place;
 use App\Models\PlaceCategory;
+use App\Models\PlaceGuide;
 use App\Models\Province;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class ProvinceController extends Controller
 {
@@ -21,6 +24,21 @@ class ProvinceController extends Controller
     public function indexAll(){
         $data = Province::orderBy('priority', 'asc')->get();
         return ProvinceResource::collection($data);
+    }
+
+
+    public function provinceGuidePlaces($province_slug, $guide_slug){
+        $province = Province::where('slug', $province_slug)->first();
+        $guide = Guide::where('slug', $guide_slug)->first();
+        $placeIds = PlaceGuide::where('guide_id', $guide->id)->pluck('place_id');
+        $data = Place::with(['place_images', 'city', 'province', 'rating'])
+                ->where('province_id', $province->id)
+                ->whereIn('id', $placeIds)
+                ->orderBy('created_at', 'desc')
+                ->orderBy('name', 'asc')
+                ->paginate(12)
+                ->withQueryString();
+        return PlaceResource::collection($data);
     }
 
 
@@ -34,14 +52,16 @@ class ProvinceController extends Controller
                     ->whereIn('id', $placeIds)
                     ->where('name', 'LIKE', '%' . $request->search . '%')
                     ->orderBy('name', 'asc')
-                    ->paginate(12);
+                    ->paginate(12)
+->withQueryString();
             return PlaceResource::collection($data);
         }
         $data = Place::with(['place_images', 'city'])
             ->where('province_id', $province->id)
             ->whereIn('id', $placeIds)
             ->orderBy('name', 'asc')
-            ->paginate(12);
+            ->paginate(12)
+->withQueryString();
         return PlaceResource::collection($data);
     }
 
@@ -55,10 +75,12 @@ class ProvinceController extends Controller
         if(!empty($request->search)){
             $data = City::where('province_id', $province->id)
                     ->where('name', 'LIKE', '%' . $request->search . '%')
-                    ->orderBy('name', 'asc')->paginate(12);
+                    ->orderBy('name', 'asc')->paginate(12)
+->withQueryString();
             return CityResource::collection($data);
         }
-        $data = City::where('province_id', $province->id)->orderBy('name', 'asc')->paginate(12);
+        $data = City::where('province_id', $province->id)->orderBy('name', 'asc')->paginate(12)
+->withQueryString();
         if(!isset($data)){
             return response()->json([
                 'status' => 0,
@@ -72,12 +94,14 @@ class ProvinceController extends Controller
         if(!empty($request->search)){
             $data = Province::with(['user'])
                     ->where('name', 'LIKE', '%' . $request->search . '%')
-                    ->paginate(12);
+                    ->paginate(12)
+->withQueryString();
             return ProvinceResource::collection($data);
         }
         $data = Province::with(['user'])
                 ->orderBy('name', 'asc')
-                ->paginate(12);
+                ->paginate(12)
+->withQueryString();
         return ProvinceResource::collection($data);
     }
 
